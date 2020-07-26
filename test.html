@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>选中文本高亮</title>
+    <style>
+        button {
+            margin: 10px;
+            padding: 5px;
+        }
+        span {
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+    </style>
+    <script>
+        function createRandomNumber(start, end) {
+            return (end >= start) ? Math.floor(Math.random() * (end - start) + start) : null
+        }
+
+        function createRandomString(length, source) {
+            var length = length || 52
+            var source = source || 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+            var result = []
+            for (let i = 1; i <= length; i += 1) result.push(source.charAt(createRandomNumber(0, source.length)))
+            return result.join('')
+        }
+
+        function initDom() {
+            let bId = ['redHighlight', 'greenHighlight', 'blueHighlight']
+            let bFragment = document.createDocumentFragment()
+            for (let i = 0, ii = bId.length; i < ii; i += 1) {
+                let button = document.createElement('button')
+                let string = bId[i]
+                button.id = string
+                button.innerHTML = string.substring(string.length - 9)
+                button.style.color = string.substring(0, string.length - 9)
+                bFragment.appendChild(button)
+            }
+            document.body.appendChild(bFragment)
+
+            let div = document.createElement('div')
+            div.id = 'article'
+            document.body.appendChild(div)
+
+            let sCount = 10
+            let sFragment = document.createDocumentFragment()
+            for (let i = 0, ii = sCount; i < ii; i += 1) {
+                let span = document.createElement('span')
+                span.id = 'highlightable-' + i.toString()
+                span.innerHTML = createRandomString()
+                sFragment.appendChild(span)
+            }
+            document.getElementById('article').appendChild(sFragment)
+
+            return bId
+        }
+
+        function initData() {
+            let result = {}
+            let collection = document.getElementById('article').getElementsByTagName('span')
+            console.log(collection)
+            Array.prototype.forEach.call(collection, (item) => {
+                result[item.id] = {}
+                result[item.id]['htmlString'] = item.innerHTML
+                result[item.id]['infoArray'] = []
+            })
+            return result
+        }
+
+        function updateInfo(data, id, newInfo) {
+            let infoArray = data[id]['infoArray']
+            let result = []
+            let [newStartIdx, newEndIdx, newColor] = newInfo
+            for (let orgInfo of infoArray) {
+                let [orgStartIdx, orgEndIdx, orgColor] = orgInfo
+                if (orgStartIdx >= newStartIdx && orgStartIdx <= newEndIdx) {
+                    if (orgEndIdx >= newStartIdx && orgEndIdx <= newEndIdx) continue
+                    else result.push([newEndIdx, orgEndIdx, orgColor])
+                }
+                else if (orgEndIdx >= newStartIdx && orgEndIdx <= newEndIdx) {
+                    if (orgStartIdx >= newStartIdx && orgStartIdx <= newEndIdx) continue
+                    else result.push([orgStartIdx, newStartIdx, orgColor])
+                }
+                else if (orgStartIdx <= newStartIdx && orgEndIdx >= newEndIdx) {
+                    result.push([orgStartIdx, newStartIdx, orgColor])
+                    result.push([newEndIdx, orgEndIdx, orgColor])
+                }
+                else {
+                    result.push([orgStartIdx, orgEndIdx, orgColor])
+                }
+            }
+            result.push(newInfo)
+            result.sort((a, b) => { return a[0] <= b[0] ? a[0] == b[0] ? 0 : 1 : -1 })
+            data[id]['infoArray'] = result
+        }
+
+        function highlightHelper(data, id) {
+            let htmlString = data[id]['htmlString']
+            let infoArray = data[id]['infoArray']
+            let result = htmlString
+            for (let info of infoArray) {
+                let [startIdx, endIdx, color] = info
+                let startHtml = result.substring(0, startIdx)
+                let middleHtml = result.substring(startIdx, endIdx)
+                let endHtml = result.substring(endIdx)
+                result = startHtml + `<span style="color:${color}">` + middleHtml + '</span>' + endHtml
+            }
+            return result
+        }
+
+        function highlightSelection(data, color) {
+            let selection = document.getSelection()
+            if (selection.type !== 'Range') return
+            let range = selection.getRangeAt(0)
+            if (range.length === 0) return
+            let startContainer = range.startContainer
+            let endContainer = range.endContainer
+            let startOffset = range.startOffset
+            let endOffset = range.endOffset
+            let startNode = startContainer.parentElement
+            while (startNode.id.search(/highlightable-[0-9]+/) === -1) startNode = startNode.parentElement
+            let endNode = endContainer.parentElement
+            while (endNode.id.search(/highlightable-[0-9]+/) === -1) endNode = endNode.parentElement
+            let currNode = startNode
+            while (true) {
+                let startIdx = 0
+                let endIdx = 0
+                let isStartNode = (currNode === startNode)
+                let isEndNode = (currNode === endNode)
+                if (isStartNode && isEndNode) {
+                    let isFinishStart = false
+                    let isFinishEnd = false
+                    for (let child of currNode.childNodes) {
+                        let isTextNode = (child.tagName == null)
+                        let isStartContainer = (child === startContainer || child === startContainer.parentElement)
+                        let isEndContainer = (child === endContainer || child === endContainer.parentElement)
+                        let childLength = isTextNode ? child.length : child.innerHTML.length
+                        if (!isFinishStart && !isStartContainer) {
+                            startIdx += childLength
+                            endIdx += childLength
+                        } else if (!isFinishStart && isStartContainer && !isEndContainer) {
+                            startIdx += startOffset
+                            endIdx += childLength
+                            isFinishStart = true
+                        } else if (!isFinishStart && isStartContainer && isEndContainer) {
+                            startIdx += startOffset
+                            endIdx += endOffset
+                            isFinishStart = true
+                            isFinishEnd = true
+                        } else if (isFinishStart && !isFinishEnd && !isEndContainer) {
+                            endIdx += childLength
+                        } else if (isFinishStart && !isFinishEnd && isEndContainer) {
+                            endIdx += endOffset
+                            isFinishEnd = true
+                        } else if (isFinishEnd) {
+
+                        }
+                    }
+                } else {
+                    if (isStartNode) {
+                        let isFinishStart = false
+                        for (let child of currNode.childNodes) {
+                            let isTextNode = (child.tagName == null)
+                            let childLength = isTextNode ? child.length : child.innerHTML.length
+                            let isStartContainer = (child === startContainer || child === startContainer.parentElement)
+                            endIdx += childLength
+                            if (!isFinishStart && !isStartContainer) {
+                                startIdx += childLength
+                            } else if (!isFinishStart && isStartContainer) {
+                                startIdx += startOffset
+                                isFinishStart = true
+                            } else if (isFinishStart) {
+                                
+                            }
+                        }
+                    } else if (isEndNode) {
+                        let isFinishEnd = false
+                        for (let child of currNode.childNodes) {
+                            let isTextNode = (child.tagName == null)
+                            let childLength = isTextNode ? child.length : child.innerHTML.length
+                            let isEndContainer = (child === endContainer || child === endContainer.parentElement)
+                            if (!isFinishEnd && !isEndContainer) {
+                                endIdx += childLength
+                            } else if (!isFinishEnd && isEndContainer) {
+                                endIdx += endOffset
+                                isFinishEnd = true
+                            } else if (isFinishEnd) {
+                                
+                            }
+                        }
+                    } else {
+                        for (let child of currNode.childNodes) {
+                            let isTextNode = (child.tagName == null)
+                            let childLength = isTextNode ? child.length : child.innerHTML.length
+                            endIdx += childLength
+                        }
+                    }
+                }
+                updateInfo(data, currNode.id, [startIdx, endIdx, color])
+                currNode.innerHTML = highlightHelper(data, currNode.id)
+                if (currNode === endNode) break
+                currNode = currNode.nextElementSibling
+            }
+            document.getSelection().empty()
+        }
+
+        window.onload = function() {
+            let buttonId = initDom()
+            let globalData = initData()
+            for (let button of buttonId) {
+                document.getElementById(button).addEventListener('click', () => {
+                    console.log(globalData, button.substring(0, button.length - 9))
+                    highlightSelection(globalData, button.substring(0, button.length - 9))
+                })
+            }
+        }
+    </script>
+</head>
+<body>
+
+</body>
+</html>

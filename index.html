@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>微信阅读demo</title>
+    
+</head>
+<body onload="load()">
+  <div id="weread"></div>
+
+  <script>
+        function load() {
+            const weread = we_read('#weread', {
+                data: {
+                    title: '第一章 科学边界',
+                    content: `<p>汪淼觉得，来找他的这四个人是一个奇怪的组合：两名警察和两名军人，如果那两个军人是武警还算正常，但这是两名陆军军官。</p>
+                        <p>汪淼第一眼就对来找他的警察没有好感。其实那名穿警服的年轻人还行，举止很有礼貌，但那位便衣就让人讨厌了。这人长得五大三粗，一脸横肉，穿着件脏兮兮的皮夹克，浑身烟味，说话粗声大嗓，是最令汪淼反感的那类人。</p>
+                        <p>“汪淼？”那人问，直呼其名令汪淼很不舒服，况且那人同时还在点烟，头都不抬一下。不等汪淼回答，他就向旁边那位年轻人示意了一下，后者向汪淼出示了警官证，他点完烟后就直接向屋里闯。</p>
+                    `
+                },
+
+                tips: [
+                    { key: 'copy', text: '复制', icon: 'https://weread-1258476243.file.myqcloud.com/web/wrwebnjlogic/image/reader_toolbar_underline_copy.07fe36df.png' },
+                    { key: 'underlineBg', text: '马克笔', icon: 'https://weread-1258476243.file.myqcloud.com/web/wrwebnjlogic/image/reader_toolbar_underline_bg.af6fb6a9.png' },
+                    { key: 'underlineHandWrite', text: '波浪线', icon: 'https://weread-1258476243.file.myqcloud.com/web/wrwebnjlogic/image/reader_toolbar_underline_handwrite.fe9a7d52.png' },
+                    { key: 'underlineStraight', text: '直线', icon: 'https://weread-1258476243.file.myqcloud.com/web/wrwebnjlogic/image/reader_toolbar_underline_straight.ffe7184a.png' },
+                    { key: 'removeUnderline', text: '删除划线', icon: 'https://weread-1258476243.file.myqcloud.com/web/wrwebnjlogic/image/reader_toolbar_underline_remove.d3a8e13b.png' },
+                    { key: 'review', text: '写想法', icon: 'https://weread-1258476243.file.myqcloud.com/web/wrwebnjlogic/image/reader_toolbar_review.fcb1e862.png' },
+                    { key: 'query', text: '查询', icon: 'https://weread-1258476243.file.myqcloud.com/web/wrwebnjlogic/image/reader_toolbar_query.ba0f29c3.png' },
+                ]
+                
+            })
+        }
+  </script>
+</body>
+</html>
