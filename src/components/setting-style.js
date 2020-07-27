@@ -1,7 +1,10 @@
 import Range from './range';
 
 class SettingStyle{
-    constructor() { }
+    constructor() {
+        // 设置selector
+        // this.selector = new Selector();
+     }
 
     // 复制信息
     copy() {
@@ -20,8 +23,7 @@ class SettingStyle{
 
     // 直线
     underlineStraight() {
-        this.replaceTxt('custom-underline');
-        console.log('您点击了直线');
+        this.replaceTxt('txt_underline');
     }
 
     // 删除下划线
@@ -41,43 +43,43 @@ class SettingStyle{
 
     // 文本替换页面元素
     replaceTxt(className = '') {
-        var getRange = () => {
-            var me = window;
-            var range = new Range(me.document);
+        // var getRange = () => {
+        //     var me = window;
+        //     var range = new Range(me.document);
             
-            var sel =window.getSelection();
+        //     var sel =window.getSelection();
             
-            if (sel && sel.rangeCount) {
-            var firstRange = sel.getRangeAt(0);
-            var lastRange = sel.getRangeAt(sel.rangeCount - 1);
-            console.log(firstRange,'firstRange');
-            console.log(lastRange,'lastRange');
-            range.setStart(firstRange.startContainer, firstRange.startOffset)
-                .setEnd(lastRange.endContainer, lastRange.endOffset);
-            }
-            return range
-        }
-        var range = getRange();
-        // console.log(range,'range')
-        let classNames= '';
-        if(className != 'aa'){
-            classNames= className + ' active';
-        }else{
+        //     if (sel && sel.rangeCount) {
+        //     var firstRange = sel.getRangeAt(0);
+        //     var lastRange = sel.getRangeAt(sel.rangeCount - 1);
             
-        classNames= className;
-        }
+        //     range.setStart(firstRange.startContainer, firstRange.startOffset)
+        //         .setEnd(lastRange.endContainer, lastRange.endOffset);
+        //     }
+
+        //     return range;
+        // }
+        // var range = getRange();
+
+        // let classNames = '';
         
-    
-        range.applyInlineStyle('i', {
-            class: classNames
-        });
-        if(className != 'aa'){
+        // if(className != 'aa'){
+        //     classNames= className + ' active';
+        // }else{
+        //     classNames= className;
+        // }
+        
+        // range.applyInlineStyle('i', {
+        //     class: classNames
+        // });
+
+        // if(className != 'aa'){
             
-            for(var i=0;i<document.getElementsByClassName('active').length;i++){
-                document.getElementsByClassName('active')[i].setAttribute("onclick","clicks(this,className)"); 
-            }
-        }
-        range.select();
+        //     for(var i=0;i<document.getElementsByClassName('active').length;i++){
+        //         document.getElementsByClassName('active')[i].setAttribute("onclick","clicks(this,className)"); 
+        //     }
+        // }
+        // range.select();
 
 
     }

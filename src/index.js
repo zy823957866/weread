@@ -47,7 +47,6 @@ class Weread {
         this.tipsBar.hide();
         targetEl.appendChild(this.tipsBar.el);
 
-        
     }
 
     // 创建内容
