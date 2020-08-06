@@ -930,7 +930,7 @@ Range.prototype = {
           );
         }
         var frag = range.setEndAfter(pre).extractContents(),
-          elm;
+          elm; 
         if (list && list.length > 0) {
           var level, top;
           top = level = list[0].cloneNode(false);
@@ -952,6 +952,7 @@ Range.prototype = {
             s.style.cssText = s.style.cssText + ";" + attrs.style;
           });
         }
+
         range.insertNode(list ? top : elm);
         //处理下滑线在a上的情况
         var aNode;
@@ -972,6 +973,7 @@ Range.prototype = {
         domUtils.mergeChild(elm, attrs);
         current = domUtils.getNextDomNode(elm, false, filterFn);
         domUtils.mergeToParent(elm);
+
         if (node === end) {
           break;
         }

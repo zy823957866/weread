@@ -1,5 +1,6 @@
 import { h } from './components/element';
 import { TipsBar } from './components/tips-bar';
+import { Message } from './components/message';
 import { SettingStyle } from './components/setting-style';
 
 // css样式
@@ -14,6 +15,7 @@ class Weread {
         data
     ){
         let targetEl = selectors;
+        this.data    = data;
         
         if(typeof selectors === 'string') {
             targetEl = document.querySelector(selectors);
@@ -33,8 +35,12 @@ class Weread {
             this.startSelect(e);
         })
 
+        // 设置tooltip
+        this.tooltip = new Message();
+        targetEl.appendChild(this.tooltip.create());
+
         // 设置样式
-        this.settingStyle = new SettingStyle();
+        this.settingStyle = new SettingStyle(this.tooltip);
 
         targetEl.appendChild(rootElChildren);
 
@@ -46,8 +52,6 @@ class Weread {
         // 隐藏tips
         this.tipsBar.hide();
         targetEl.appendChild(this.tipsBar.el);
-
-        
     }
 
     // 创建内容
@@ -82,7 +86,6 @@ class Weread {
     useless(target, event) {
         // 取消冒泡
         target.on(event, (e) => {
-            console.log(e)
             e = e || window.event;
 
             e.cancelBubble = true;
@@ -95,11 +98,14 @@ class Weread {
         e = e || window.event;
 
         let sel = window.getSelection();
+        let self = this;
 
         if(sel && sel.rangeCount) {
             if(!sel.isCollapsed) {
-                // 如果有选中的内容
-                this.tipsBar.setEndPos(e, sel);
+                // 为选中的内容添加weread_selection 类名
+                this.settingStyle.selection('selection', function() {
+                    self.tipsBar.tipsPos(e);
+                });
             }
         }
     }
@@ -107,7 +113,11 @@ class Weread {
     // 开始选择
     startSelect(e) {
         e = e || window.event;
-        this.tipsBar.setStartPos(e);
+
+        let self = this;
+        this.tipsBar.setStartPos(e,function() {
+            self.settingStyle.destroySelection();
+        });
     }
 
 }

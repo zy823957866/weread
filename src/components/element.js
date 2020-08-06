@@ -58,15 +58,6 @@ class Element {
         return this.el;
     }
 
-    // // 删除子元素
-    // removeChild(...els) {
-    //     els.forEach(it => {
-    //         this.el.removeChild(it.el)
-    //     })
-
-    //     return this.el;
-    // }
-
     // 设置属性
     attr(key, value) {
         if (value !== undefined) {
@@ -81,6 +72,8 @@ class Element {
         }
         return this;
     }
+
+    // 
 
 }
 

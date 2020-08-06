@@ -37,6 +37,20 @@ html, body{
         padding-bottom: 20px;
     }
 
+    .selection{
+        font-style: normal;
+        background: rgba(0,151,255,.15);
+        color: #d0d3d8;
+        line-height: 44px;
+        // display: inline-block;
+        text-indent: 0;
+        // position: relative;
+        // &::selection {
+        //     background: rgba(0,151,255,.15);
+        //     color: #d0d3d8;
+        // }
+    }
+
     p::selection {
         background: rgba(0,151,255,.15);
         color: #d0d3d8;
@@ -86,5 +100,38 @@ html, body{
         &:hover, &.selected{
             background: linear-gradient(180deg,rgba(0,0,0,.2),transparent);
         }
+    }
+
+    .tooltips{
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: auto;
+        top: 0;
+        bottom: 0;
+        border-radius: 4px;
+        height: 44px;
+        line-height: 44px;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: #bbb;
+        display: none;
+        z-index: 10;
+        width: 200px;
+        text-align: center;
+    }
+
+    .set-bg{
+        background-color: rgba(255, 195, 75, 0.2);
+        font-style: normal;
+    }
+
+    .set-wave{
+        font-style: normal;
+        color: red;
+    }
+
+    .set-underline{
+        font-style: normal;
+        text-decoration: underline;
     }
 }

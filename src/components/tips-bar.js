@@ -37,6 +37,9 @@ class TipsBar{
 
                     // 执行事件
                     this.clickEvent(it.key);
+
+                    // 隐藏弹框
+                    this.hide();
                 })
 
                 arr.push(el);
@@ -104,8 +107,10 @@ class TipsBar{
     }
 
     // 开始选中的位置
-    setStartPos(e) {
+    setStartPos(e, cb=function() {}) {
         this.hide();
+
+        cb();
 
         this.position = {
             x: e.clientX,
@@ -113,35 +118,52 @@ class TipsBar{
         }
     }
 
-    // 设置位置
-    setEndPos(e, sel) {
+    // 设置tips位置
+    tipsPos(e) {
+        let selection = document.getElementsByClassName('selection')[0];
         let wrapEl = document.getElementById('weread');
-        // 起始位置
-        const { x, y } = this.position;
-        // 结束位置
-        const _x = e.clientX, _y = e.clientY;
-        let left, top = e.target.offsetTop;
+        let contentEl = document.getElementsByClassName('content-wrap')[0];
 
         this.show();
 
         // tips宽度
-        let tipsW = this.el.clientWidth || this.el.offsetWidth;
+        let tipsW = this.getElWidth(this.el);
+        let tipsH = this.getElHeight(this.el);
         // 容器宽度
-        let wrapW = wrapEl.clientWidth || wrapEl.offsetWidth;
+        let wrapW = this.getElWidth(wrapEl);
+        // selection宽度
+        let selectW = this.getElWidth(selection);
+        let contentW = this.getElWidth(contentEl);
 
-        left = Math.min(x, _x);
-        top = Math.min(y, _y);
+        if(selection) {
+            // 起始位置
+            const { x } = this.position;
+            // // 结束位置
+            const _x = e.clientX;
+            let left, top, prefixH = 20;
 
-        // if(Math.abs(x - _x) < tipsW) {
-        //     left = left + (Math.abs(x - _x) / 2) - (tipsW / 2);
-        // }else if(){
+            left = Math.min(x, _x);
+            top = selection.offsetTop - tipsH - prefixH;
 
-        // }
+            if(selectW < contentW) {
+                left = left + (Math.abs(x - _x) / 2) - (tipsW / 2);
+            }else {
+                left = left + ((wrapW + wrapEl.offsetLeft - left - tipsW) / 2)
+            }
 
-        this.css({
-            left: left - wrapEl.offsetLeft + 'px',
-            top: top - 100 + 'px'
-        });
+            this.css({
+                left: left - wrapEl.offsetLeft + 'px',
+                top: top + 'px'
+            });
+        }
+    }
+
+    getElWidth(e) {
+        return e && (e.clientWidth || e.offsetWidth) || 0;
+    }
+
+    getElHeight(e) {
+        return e && (e.clientHeight || e.offsetHeight) || 0;
     }
 }
 
