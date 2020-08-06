@@ -7,7 +7,7 @@ import { SettingStyle } from './components/setting-style';
 import './index.less';
 
 // 阻止事件的类型[貌似不生效]
-const useLessEventName = ['mousedown', 'mouseup', 'paste', 'dragstart', 'copy'];
+const useLessEventName = ['oncopy', 'oncontextmenu'];
 
 class Weread {
     constructor(
@@ -84,10 +84,12 @@ class Weread {
 
     // 阻止事件【禁止粘贴，禁止拖拽】
     useless(target, event) {
+        // 阻止右键
+        document.oncontextmenu = function() { return false; }
+
+
         // 取消冒泡
         target.on(event, (e) => {
-            
-
             e = e || window.event;
             e.cancelBubble = true;
             e.stopPropagation();

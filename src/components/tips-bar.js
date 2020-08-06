@@ -46,6 +46,8 @@ class TipsBar{
             }
         }
 
+        arr.push(h('span', 'arrow'));
+
         // 保存操作栏
         this.children = [...arr];
 
@@ -140,7 +142,7 @@ class TipsBar{
             const { x } = this.position;
             // // 结束位置
             const _x = e.clientX;
-            let left, top, prefixH = 20;
+            let left, top, prefixH = 10;
 
             left = Math.min(x, _x);
             top = selection.offsetTop - tipsH - prefixH;
