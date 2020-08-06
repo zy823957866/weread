@@ -7,7 +7,7 @@ import { SettingStyle } from './components/setting-style';
 import './index.less';
 
 // 阻止事件的类型[貌似不生效]
-const useLessEventName = ['onmousedown', 'onmouseup', 'paste', 'dragstart', 'copy'];
+const useLessEventName = ['mousedown', 'mouseup', 'paste', 'dragstart', 'copy'];
 
 class Weread {
     constructor(
@@ -86,8 +86,9 @@ class Weread {
     useless(target, event) {
         // 取消冒泡
         target.on(event, (e) => {
-            e = e || window.event;
+            
 
+            e = e || window.event;
             e.cancelBubble = true;
             e.stopPropagation();
         })
