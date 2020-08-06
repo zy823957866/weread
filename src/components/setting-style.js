@@ -96,6 +96,7 @@ class SettingStyle{
 
     // 删除文本样式
     removeStyle(classname = '') {
+        alert("删下划线，暂未处理")
         let range = this.range();
 
         range.removeInlineStyle('i', classname);
@@ -135,30 +136,23 @@ class SettingStyle{
             let elParentClass = elParent.className.replace(' active', '');
             
 
-            if(ACTION_TYPE.indexOf(elParentClass) !== -1) {
-                // 二级内容替换
-                if(elChildren.length === 0){
+            if(elChildren.length === 0) {
+                // 没有子节点
+                if(ACTION_TYPE.indexOf(elParentClass) !== -1) {
+                    // 父节点包括波浪线直线等替换方式
                     this.replaceChildren(elParent.parentNode, els[i].parentNode);
                 }else {
-                    for(let j = 0; j < elChildren.length; j++) {
-                        this.replaceChildren(elChildren[j].parentNode.parentNode, elChildren[j].parentNode);
-                    }
-                }
-                
-            }else {
-                // 处理children
-                if(elChildren.length === 0) {
-                    // 只有一级替换
+                    // 父节点不包含波浪线直线等替换方式
                     this.replaceHTML(elParent, this.node2string(els[i]), `<i class = "${elClass}">${els[i].innerHTML}</i>`);
-                }else {
-                    for(let j = 0; j < elChildren.length; j++) {
-                        this.replaceChildren(elChildren[j].parentNode.parentNode, elChildren[j].parentNode);
-                    }
+                }
+            }else {
+                // 子节点替换
+                for(let j = 0; j < elChildren.length; j++) {
+                    this.replaceChildren(elChildren[j].parentNode.parentNode, elChildren[j].parentNode);
                 }
             }
         }
         
-
         // 清空选中的数据
         this.clearSelection();
     }

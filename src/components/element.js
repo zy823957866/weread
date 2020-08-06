@@ -73,8 +73,6 @@ class Element {
         return this;
     }
 
-    // 
-
 }
 
 const h = (tag, className = '') => new Element(tag, className);
