@@ -3,6 +3,17 @@
     padding: 0;
 }
 
+::selection {
+    background-color:none;
+}
+
+select::-ms-expand { display: none; }
+
+p {
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+}
+
 html, body{
     background-color: #17181a;
     width: 100%;
@@ -17,6 +28,7 @@ html, body{
     height: 100%;
     padding: 0 80px;
     position: relative;
+    cursor: default;
 
     .text-center{
         text-align: center;
@@ -42,25 +54,10 @@ html, body{
         background: rgba(0,151,255,.15);
         color: #d0d3d8;
         line-height: 44px;
-        // display: inline-block;
         text-indent: 0;
-        // position: relative;
-        // &::selection {
-        //     background: rgba(0,151,255,.15);
-        //     color: #d0d3d8;
-        // }
     }
 
     p::selection {
-        background: rgba(0,151,255,.15);
-        color: #d0d3d8;
-    }
-
-    ::-moz-selection {
-        background: rgba(0,151,255,.15);
-        color: #d0d3d8;
-    }
-    ::-webkit-selection {
         background: rgba(0,151,255,.15);
         color: #d0d3d8;
     }
@@ -74,6 +71,17 @@ html, body{
         padding: 0 4px;
         position: absolute;
         width: 400px;
+
+        .arrow{
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            margin-left: -8px;
+            border-top: 8px solid #3a3c3e;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+        }
     }
     .toolbarItem {
         width: 56px;
@@ -123,15 +131,26 @@ html, body{
     .set-bg{
         background-color: rgba(255, 195, 75, 0.2);
         font-style: normal;
+        cursor: pointer;
     }
 
     .set-wave{
         font-style: normal;
-        color: red;
+        background-image: url(https://weread-1258476243.file.myqcloud.com/web/wrwebnjlogic/image/reader_underline_handwrite.06b662d8.png);
+        background-size: 9px 4px;
+        background-position: 0 100%;
+        background-repeat: repeat-x;
+        padding-bottom: 5px;
+        cursor: pointer;
     }
 
     .set-underline{
         font-style: normal;
-        text-decoration: underline;
+        background-image: url(https://weread-1258476243.file.myqcloud.com/web/wrwebnjlogic/image/reader_underline_straight.c7285bcc.png);
+        background-position: 0 100%;
+        background-repeat: no-repeat;
+        background-size: 100% 3px;
+        padding-bottom: 5px;
+        cursor: pointer;
     }
 }
