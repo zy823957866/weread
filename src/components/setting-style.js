@@ -53,8 +53,10 @@ class SettingStyle{
         this.replaceTxt(classname);
         // 销毁选择框
         this.destroySelection();
-        // 合并标签内容
-        this.mergeTag(classname);
+        // 替换文本元素
+        this.replaceNodes(classname);
+        // 合并相邻元素
+        this.merge();
     }
 
     // 设置选中样式
@@ -68,7 +70,7 @@ class SettingStyle{
 
         if(selections && selections.length) {
             for(let i = 0; i < selections.length; i++) {
-                if(selections[i].className === 'selection') {
+                if(selections[i].className === 'selection active') {
                     // 如果只有selection类名 则进行销毁
                     this.replaceHTML(selections[i].parentNode, this.node2string(selections[i]), selections[i].innerHTML);
                 }
@@ -81,7 +83,7 @@ class SettingStyle{
         let range = this.range();
 
         range.applyInlineStyle('i', {
-            class: className
+            class: className + ' active'
         });
 
         range.select();
@@ -122,23 +124,36 @@ class SettingStyle{
     }
 
     // 合并相同且相邻的标签
-    mergeTag(classname = ''){
-        let sel = window.getSelection();
+    replaceNodes(classname = ''){
 
-        if(sel) {
-            if(sel.baseNode) {
-                
-                for(let i = 1; i < sel.baseNode.childNodes.length; i++) {
-                    this.replaceChildren(sel, 'baseNode', sel.baseNode.childNodes[i]);
-                    // this.replaceContent(sel, 'baseNode', classname, i);
+        let els = document.getElementsByClassName('active');
+
+        for(let i = 0; i < els.length; i++) {
+            let elParent = els[i].parentNode;
+            let elChildren = els[i].children;
+            let elClass = els[i].className.replace(' active', '');
+            let elParentClass = elParent.className.replace(' active', '');
+            
+
+            if(ACTION_TYPE.indexOf(elParentClass) !== -1) {
+                // 二级内容替换
+                if(elChildren.length === 0){
+                    this.replaceChildren(elParent.parentNode, els[i].parentNode);
+                }else {
+                    for(let j = 0; j < elChildren.length; j++) {
+                        this.replaceChildren(elChildren[j].parentNode.parentNode, elChildren[j].parentNode);
+                    }
                 }
-                domUtils.mergeChild(sel.baseNode, classname)
-            }
-
-            if(sel.focusNode) {
-                for(let i = 1; i < sel.focusNode.childNodes.length; i++) {
-                    // this.replaceChildren(sel, 'focusNode', sel.focusNode.childNodes[i]);
-                    this.replaceContent(sel, 'focusNode', classname, i);
+                
+            }else {
+                // 处理children
+                if(elChildren.length === 0) {
+                    // 只有一级替换
+                    this.replaceHTML(elParent, this.node2string(els[i]), `<i class = "${elClass}">${els[i].innerHTML}</i>`);
+                }else {
+                    for(let j = 0; j < elChildren.length; j++) {
+                        this.replaceChildren(elChildren[j].parentNode.parentNode, elChildren[j].parentNode);
+                    }
                 }
             }
         }
@@ -148,11 +163,29 @@ class SettingStyle{
         this.clearSelection();
     }
 
+    // 合并相邻的相同class元素
+    merge() {
+        ACTION_TYPE.forEach(it => {
+            let nodes = document.getElementsByClassName(it);
+
+            for(let i = 0; i < nodes.length; i++) {
+                this.replaceNodeContent(nodes[i].parentNode, it);
+            }
+        })
+    }
+
+    replaceNodeContent(node, classname){
+        // console.log(node, classname)
+        for(let i = 0; i < node.childNodes.length; i++) {
+            this.replaceContent(node, classname, i);
+        }
+    }
+
     // 替换平级文本内容
-    replaceContent(sel, type, classname, index) {
-        let cEl     = sel[type].childNodes[index],
-            oEl     = sel[type].childNodes[index-1],
-            nEl     = sel[type].childNodes[index+1],
+    replaceContent(node, classname, index) {
+        let cEl     = node.childNodes[index],
+            oEl     = node.childNodes[index-1],
+            nEl     = node.childNodes[index+1],
             cClass  = cEl && cEl.className,
             oClass  = oEl && oEl.className,
             nClass  = nEl && nEl.className;
@@ -167,28 +200,30 @@ class SettingStyle{
             cContent = `<i class="${classname}">${oEl.innerHTML}${cEl.innerHTML}</i>`;
         }
 
-        sel[type].innerHTML = sel[type].innerHTML.replace(oContent, cContent);
+        node.innerHTML = node.innerHTML.replace(oContent, cContent);
     }
 
     // 替换子级文本内容
-    replaceChildren(sel, type, el) {
-        if(el && el.childNodes.length) {
+    replaceChildren(node, el) {
+        if(el && el.childNodes.length && node) {
             let elClass = el.className;
             let content = '';
             let oContent = `<i class="${elClass}">${el.innerHTML}</i>`;
-            console.log(el)
+            let cClass = node.getElementsByClassName('active')[0].className.replace(' active', '');
+            let newElClass = elClass.replace(' active', '');
+
             for(let i=0; i<el.childNodes.length; i++) {
                 let child = el.childNodes[i];
                 let isHtml = this.isHtml(child);
 
                 if(isHtml){
-                    content += `<i class="${elClass}">${child.innerHTML}</i>`;
+                    content += `<i class="${cClass}">${child.innerHTML}</i>`;
                 }else {
-                    content += `<i class="${elClass}">${child.data}</i>`;
+                    content += `<i class="${newElClass}">${child.data}</i>`;
                 }
             }
 
-            sel[type].innerHTML = sel[type].innerHTML.replace(oContent, content);
+            node.innerHTML = node.innerHTML.replace(oContent, content);
         }
     }
 
@@ -210,7 +245,6 @@ class SettingStyle{
 
     // node节点转为字符串
     node2string(node) {
-        console.log(node)
         var tmpNode = document.createElement( "div" );
         tmpNode.appendChild( node.cloneNode( true ) );
         var str = tmpNode.innerHTML;
