@@ -26,14 +26,10 @@ class Weread {
         const rootEl = h('div', 'weread');
         const rootElChildren = rootEl.children(wrapContent.title, wrapContent.content);
 
-        // 事件
-        rootEl.on('mouseup', (e) => {
-            this.endSelect(e);
-        })
+        // 监听document事件
+        document.onmouseup = (e) => { this.endSelect(e); }
+        document.onmousedown = (e) => { this.startSelect(e); }
 
-        rootEl.on('mousedown', (e) => {
-            this.startSelect(e);
-        })
 
         // 设置tooltip
         this.tooltip = new Message();
@@ -102,9 +98,10 @@ class Weread {
 
         let sel = window.getSelection();
         let self = this;
-
+        
         if(sel && sel.rangeCount) {
-            if(!sel.isCollapsed) {
+            console.log(sel.baseNode, sel)
+            if(!sel.isCollapsed && sel.baseNode.className.indexOf('content-wrap') === -1) {
                 // 为选中的内容添加weread_selection 类名
                 this.settingStyle.selection('selection', function() {
                     self.tipsBar.tipsPos(e);

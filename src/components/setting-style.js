@@ -169,7 +169,6 @@ class SettingStyle{
     }
 
     replaceNodeContent(node, classname){
-        // console.log(node, classname)
         for(let i = 0; i < node.childNodes.length; i++) {
             this.replaceContent(node, classname, i);
         }
