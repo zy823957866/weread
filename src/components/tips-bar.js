@@ -1,6 +1,6 @@
 import { h } from './element';
 
-class TipsBar{
+class TipsBar {
     constructor(
         data,
         cb
@@ -60,7 +60,7 @@ class TipsBar{
 
         tips.children(...this.create());
 
-        return tips.el;
+        return tips;
     }
 
     // 添加class
@@ -78,28 +78,18 @@ class TipsBar{
 
     // 设置css
     css(name, value) {
-        if (value === undefined && typeof name !== 'string') {
-            Object.keys(name).forEach((k) => {
-                this.el.style[k] = name[k];
-            });
-            return this;
-        }
-        if (value !== undefined) {
-            this.el.style[name] = value;
-            return this;
-        }
-        return this.el.style[name];
+        return this.el.css(name, value)
     }
 
     // 设置显示
     show() {
-        this.css('display', 'inline-block');
+        this.el.show();
         return this;
     }
 
     // 设置隐藏
     hide() {
-        this.css('display', 'none');
+        this.el.hide();
         return this;
     }
 
@@ -129,8 +119,8 @@ class TipsBar{
         this.show();
 
         // tips宽度
-        let tipsW = this.getElWidth(this.el);
-        let tipsH = this.getElHeight(this.el);
+        let tipsW = this.getElWidth(this.el.el);
+        let tipsH = this.getElHeight(this.el.el);
         // 容器宽度
         let wrapW = this.getElWidth(wrapEl);
         // selection宽度

@@ -1013,6 +1013,8 @@ Range.prototype = {
       }
       end = end.parentNode;
     }
+
+    console.log(start, end)
     var bookmark = this.createBookmark(),
       frag,
       tmpRange;

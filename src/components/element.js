@@ -73,6 +73,33 @@ class Element {
         return this;
     }
 
+    // 设置css
+    css(name, value) {
+        if (value === undefined && typeof name !== 'string') {
+            Object.keys(name).forEach((k) => {
+                this.el.style[k] = name[k];
+            });
+            return this;
+        }
+        if (value !== undefined) {
+            this.el.style[name] = value;
+            return this;
+        }
+        return this.el.style[name];
+    }
+
+    // 设置显示
+    show() {
+        this.css('display', 'inline-block');
+        return this;
+    }
+
+    // 设置隐藏
+    hide() {
+        this.css('display', 'none');
+        return this;
+    }
+
 }
 
 const h = (tag, className = '') => new Element(tag, className);
