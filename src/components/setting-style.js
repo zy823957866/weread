@@ -10,6 +10,7 @@ class SettingStyle{
     ) { 
         this.tooltip = tooltip;
         this.activeClass = '';
+        this.deleteTxt = '';
     }
 
     // 复制信息
@@ -96,10 +97,19 @@ class SettingStyle{
 
     // 删除文本样式
     removeStyle(classname = '') {
-        alert("删下划线，暂未处理")
         let range = this.range();
 
-        range.removeInlineStyle('i', classname);
+        range.applyInlineStyle('i', {
+            class: classname + ' delete'
+        });
+
+        let deleteNode = document.getElementsByClassName('delete');
+
+        for(let i=0; i<deleteNode.length; i++) {
+            this.deleteTxt = '';
+            this.childNodeToText(deleteNode[i]);
+            this.replaceHTML(deleteNode[i].parentNode, this.node2string(deleteNode[i]), this.deleteTxt);
+        }
     }
 
     // 获取range
@@ -108,7 +118,7 @@ class SettingStyle{
             let me = window;
             let range = new Range(me.document);
             
-            let sel =window.getSelection();
+            let sel = window.getSelection();
             
             if (sel && sel.rangeCount) {
                 let firstRange = sel.getRangeAt(0);
@@ -136,7 +146,7 @@ class SettingStyle{
             let elParentClass = elParent.className.replace(' active', '');
             
 
-            if(elChildren.length === 0) {
+            if(elChildren.length === 0) { 
                 // 没有子节点
                 if(ACTION_TYPE.indexOf(elParentClass) !== -1) {
                     // 父节点包括波浪线直线等替换方式
@@ -218,6 +228,25 @@ class SettingStyle{
 
             node.innerHTML = node.innerHTML.replace(oContent, content);
         }
+    }
+
+    // 将含有delete的类名的子节点转为text
+    childNodeToText(nodes) {
+        if(nodes) {
+            for(let i = 0; i<nodes.childNodes.length; i++){
+                if(this.isHtml(nodes.childNodes[i])) {
+                    this.childNodeToText(nodes.childNodes[i]);
+                }else {
+                    // 设置替换的文字
+                    this.setDeleteTxt(nodes.childNodes[i].data)
+                }
+            }
+        }
+    }
+
+    // 设置替换后的文字
+    setDeleteTxt(text) {
+        this.deleteTxt += text;
     }
 
     // 清空选中的内容

@@ -9,6 +9,21 @@
 
 select::-ms-expand { display: none; }
 
+::-webkit-input-placeholder {
+    color: #999;
+}
+:-ms-input-placeholder {
+    color: #999;
+}
+::-moz-placeholder {
+    color: #999;
+    opacity: 1;
+}
+:-moz-placeholder {
+    color: #999;
+    opacity: 1;
+}
+
 p {
     -webkit-margin-before: 0;
     -webkit-margin-after: 0;
@@ -152,5 +167,205 @@ html, body{
         background-size: 100% 3px;
         padding-bottom: 5px;
         cursor: pointer;
+    }
+
+    // 评论
+    .writeReview{
+        position: fixed;
+        z-index: 5;
+        bottom: 44px;
+        box-sizing: border-box;
+        width: 900px;
+        height: 248px;
+        max-height: 80%;
+        
+        .readerWriteReviewPanel_bg{
+            background-color: rgba(50,50,50,.8);
+            backdrop-filter: blur(40px);
+            position: relative;
+            padding: 24px;
+            border-radius: 12px;
+            height: 100%;
+            box-sizing: border-box;
+
+            .closeButton{
+                position: absolute;
+                z-index: 6;
+                right: 16px;
+                top: 16px;
+                width: 20px;
+                height: 20px;
+                text-indent: -9999em;
+                overflow: hidden;
+                background: url(https://weread-1258476243.file.myqcloud.com/web/wrwebnjlogic/image/dialog_close.a5f40ec8.png) no-repeat;
+                background-size: 100%;
+            }
+
+            .writeReview_editor{
+                position: absolute;
+                top: 0;
+                bottom: 100px;
+                left: 0;
+                right: 0;
+                .writeReview_icon{
+                    position: absolute;
+                    left: 24px;
+                    top: 38px;
+                    width: 24px;
+                    height: 24px;
+                    background: url(https://weread-1258476243.file.myqcloud.com/web/wrwebnjlogic/image/review_popup_review.a35138a4.png) no-repeat;
+                    background-size: 100%;
+                }
+                .writeReview_textarea{
+                    padding: 36px 58px 0;
+                    color: #fff;
+                    width: 100%;
+                    height: 100%;
+                    background-color: transparent;
+                    border: 0;
+                    font-size: 17px;
+                    line-height: 28px;
+                    resize: none;
+                    box-sizing: border-box;
+                    outline: none;
+                    overflow: auto;
+                }
+            }
+
+            .writeReview_footer{
+                position: absolute;
+                bottom: 0;
+                left: 24px;
+                right: 24px;
+                text-align: left;
+                .writeReview_footer_Border{
+                    border-radius: 0;
+                    border: solid hsla(0,0%,100%,.05);
+                    border-width: 1px 0 0;
+                    padding: 24px 0;
+                }
+
+                .menu_container{
+                    position: relative;
+                    text-align: left;
+
+                    .menu_option_container{
+                        top: -180px;
+                        max-height: 180px;
+                        left: 0px;
+                        position: absolute;
+                        z-index: 10;
+                        // display: none;
+                    }
+                    ul{
+                        background: #424242;
+                        border-radius: 6px;
+                        overflow: hidden;
+                    }
+                    li{
+                        list-style: none;
+                        padding: 10px 12px;
+                        font-size: 13px;
+                        min-width: 120px;
+                        cursor: pointer;
+                        &:hover {
+                            background-color: #383838;
+                        }
+                    }
+                    .writeReview_footer_Menu_Icon{
+                        float: left;
+                        width: 16px;
+                        height: 16px;
+                        margin-right: 8px;
+                        margin-top: 7px;
+                    }
+                    .publish{
+                        background: url(https://weread-1258476243.file.myqcloud.com/web/wrwebnjlogic/image/review_private_publish.358fd280.png) no-repeat;
+                        background-size: 100%;
+                    }
+                    .follow {
+                        background: url(https://weread-1258476243.file.myqcloud.com/web/wrwebnjlogic/image/review_private_follow.c3d1ac71.png) no-repeat;
+                        background-size: 100%;
+                    }
+                    .secret {
+                        background: url(https://weread-1258476243.file.myqcloud.com/web/wrwebnjlogic/image/review_private_secret.ea0011c6.png) no-repeat;
+                        background-size: 100%;
+                    }
+                    .writeReview_footer_Menu_Title{
+                        line-height: 1em;
+                        color: #B2B4B6;
+                    }
+                    .writeReview_footer_Menu_Subtitle{
+                        color: #8a8c90;
+                        display: block;
+                        margin-top: 5px;
+                        font-size: 12px;
+                    }
+                }
+
+                .writeReview_private_button{
+                    background-color: hsla(0,0%,100%,.1);
+                    cursor: pointer;
+                    float: left;
+                    height: 32px;
+                    border-radius: 16px;
+                    padding: 0 12px;
+
+                    .button_leftIcon{
+                        background: url(https://weread-1258476243.file.myqcloud.com/web/wrwebnjlogic/image/review_private_publish.358fd280.png) no-repeat;
+                        background-size: 100%;
+                        width: 16px;
+                        height: 16px;
+                        margin-top: 5px;
+                        margin-right: 4px;
+                        display: inline-block;
+                        vertical-align: middle;
+                        cursor: pointer;
+                    }
+
+                    .button_text{
+                        color: #fff;
+                        font-size: 13px;
+                        font-weight: 700;
+                        display: inline-block;
+                        vertical-align: middle;
+                        margin-top: 7px;
+                        cursor: pointer;
+                    }
+
+                    .button_rightIcon{
+                        width: 7px;
+                        height: 11px;
+                        margin-left: 12px;
+                        background: url(https://weread-1258476243.file.myqcloud.com/web/wrwebnjlogic/image/arrow_right_white.1dbf14d1.png) no-repeat;
+                        background-size: 100%;
+                        display: inline-block;
+                        vertical-align: middle;
+                        margin-top: 7px;
+                    }
+                }
+
+                .writeReview_submit_button{
+                    cursor: default;
+                    opacity: .5;
+                    float: right;
+                    height: 32px;
+                    line-height: 32px;
+                    border-radius: 16px;
+                    display: block;
+                    font-size: 15px;
+                    padding: 0 28px;
+                    background: linear-gradient(90deg,#0087fc,#28b7ff);
+                    user-select: none;
+                    color: #fff!important;
+                    border: none;
+                    outline: none;
+                }
+
+                .writeReview_footer_Clear{
+                    clear: both;
+                }
+            }
+        }
     }
 }
